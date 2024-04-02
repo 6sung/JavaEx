@@ -61,6 +61,7 @@ public class EmpDao implements IEmpDao{
 		Connection con = null;
 		try {
 			con = DataSource.getConnection();
+			con.setAutoCommit(false);
 			// job_history 테이블 데이터 삭제
 			// employees 테이블 데이터 삭제
 			String sql1 = "delete from job_history where employee_id=?";
@@ -68,11 +69,23 @@ public class EmpDao implements IEmpDao{
 			stmt1.setInt(1, employeeId);
 			stmt1.executeUpdate();
 			
-			String sql2 = "delete from employees where employees_id=? and email=?";
+			String sql2 = "delete from employees where employee_id=? and email=?";
 			PreparedStatement stmt2 = con.prepareStatement(sql2);
+			stmt2.setInt(1, employeeId);
+			stmt2.setString(2, email);
+			int deleteCount = stmt2.executeUpdate();
+			if(deleteCount == 0) {
+				throw new RuntimeException("사원정보가 삭제되지 않았습니다.");
+			}
+			//다른 사람의 매니저이면 참조 무결성 위배로 예외처리가 실행된다. 따라서 위의 try시작지점에서 autocommit false로 변경한다.
+			con.commit();
 		}catch(Exception e) {
+			try {con.rollback();}catch(Exception e2) {}
 			throw new RuntimeException(e);
 		}finally {
+			try{con.setAutoCommit(true);} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 			DataSource.closeConnection(con);
 		}
 	}
