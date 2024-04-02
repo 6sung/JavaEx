@@ -26,20 +26,29 @@ public class EmpMain {
 			System.out.println(e.getMessage());
 		}
 		
-		EmpVo updateEmp = new EmpVo();
-		updateEmp.setEmployeeId(300);
-		updateEmp.setSalary(9000);
-		dao.updateEmpSalary(updateEmp);
+//		EmpVo updateEmp = new EmpVo();
+//		updateEmp.setEmployeeId(300);
+//		updateEmp.setSalary(9000);
+//		dao.updateEmpSalary(updateEmp);
+//		try {
+//			EmpVo emp = dao.selectEmp(300);
+//			System.out.println(emp);
+//		}catch(RuntimeException e) {
+//			System.out.println(e.getMessage());
+//		}
+		
+		
+//		List<EmpVo> empList = dao.selectAllEmps();
+//		for(EmpVo emp : empList) {
+//			System.out.println(emp);
+//		}
+
+		dao.deleteEmp(300, "HEOJK");
 		try {
 			EmpVo emp = dao.selectEmp(300);
 			System.out.println(emp);
 		}catch(RuntimeException e) {
 			System.out.println(e.getMessage());
 		}
-		
-//		List<EmpVo> empList = dao.selectAllEmps();
-//		for(EmpVo emp : empList) {
-//			System.out.println(emp);
-//		}
 	}
 }
